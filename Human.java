@@ -40,8 +40,5 @@ class Human {
         System.out.println("Age: " + age);
         System.out.println("Alive: " + (alive ? "Yes" : "No"));
     }
-
-    public void celebrate() {
-        System.out.println(name + " is celebrating a special occasion!");
     }
 }
