@@ -1,14 +1,31 @@
-class Student extends Human {
+final class Student extends Human implements IStudiable {
     private String major;
     private float gpa;
+    private final String UNIVERSITY = "Astana IT University";
 
     public Student(int age, String name, boolean alive, String major, float gpa) {
         super(age, name, alive);
         this.major = major;
         this.gpa = gpa;
     }
+    @Override
+    public void introduce() {
+        System.out.println("Hello, I'm " + name + ", a student majoring in " + major + ".");
+    }
+    @Override
+    public void study() {
+        System.out.println(name + " is studying " + major + " at " + UNIVERSITY + ".");
+    }
 
-    public String getmajor() {
+    @Override
+    public void attendClass() {
+        System.out.println(name + " is attending a " + major + " class.");
+    }
+
+    public final void displayUniversity() {
+        System.out.println("University: " + UNIVERSITY);
+    }
+    public String getMajor() {
         return major;
     }
 
@@ -16,7 +33,11 @@ class Student extends Human {
         return gpa;
     }
 
-    public void setmajor(String major) {
+    public String getUniversity() {
+        return UNIVERSITY;
+    }
+
+    public void setMajor(String major) {
         this.major = major;
     }
 
@@ -29,5 +50,7 @@ class Student extends Human {
         super.displayInfo();
         System.out.println("Major: " + major);
         System.out.println("GPA: " + gpa);
+        displayUniversity();
     }
 }
+
