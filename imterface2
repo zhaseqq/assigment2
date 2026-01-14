@@ -1,0 +1,4 @@
+interface IStudiable {
+    void study();
+    void attendClass();
+}
