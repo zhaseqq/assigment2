@@ -1,4 +1,4 @@
-class Employee extends Human {
+class Employee extends Human implements IWorkable, IStudiable {
     private String department;
     private float salary;
     private static int totalEmployees = 0;
@@ -9,8 +9,32 @@ class Employee extends Human {
         this.salary = salary;
         totalEmployees++;
     }
+    @Override
+    public void introduce() {
+        System.out.println("Hi, I'm " + name + ", an employee in " + department + " department.");
+    }
 
-    public String getdepartment() {
+    @Override
+    public void work() {
+        System.out.println(name + " is working in " + department + " department.");
+    }
+
+    @Override
+    public void takeBreak() {
+        System.out.println(name + " is taking a coffee break.");
+    }
+
+    @Override
+    public void study() {
+        System.out.println(name + " is studying new professional skills.");
+    }
+
+    @Override
+    public void attendClass() {
+        System.out.println(name + " is attending a professional training class.");
+    }
+
+    public String getDepartment() {
         return department;
     }
 
@@ -22,7 +46,7 @@ class Employee extends Human {
         return totalEmployees;
     }
 
-    public void setdepartment(String department) {
+    public void setDepartment(String department) {
         this.department = department;
     }
 
