@@ -4,15 +4,15 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        Human emp1 = new Employee(30, "Aliya", true, "IT", 75000.50f);
+        Employee emp2 = new Employee(35, "Nurlan", true, "Finance", 85000.00f);
+        IWorkable emp3 = new Employee(28, "Dana", true, "Marketing", 70000.00f);
+        IStudiable emp4 = new Employee(32, "Arman", true, "HR", 72000.00f);
 
+        Human std1 = new Student(20, "Asel", true, "Computer Science", 3.8f);
+        Student std2 = new Student(21, "Dias", true, "Business", 3.5f);
+        IStudiable std3 = new Student(19, "Madina", true, "Engineering", 3.9f);
 
-        Human human1 = new Human(45, "Marat", true);
-
-
-        Employee employee1 = new Employee(30, "Aliya", true, "IT", 75000.50f);
-
-
-        System.out.println("Enter Student Information:");
         System.out.print("Name: ");
         String studentName = scanner.nextLine();
 
@@ -26,53 +26,53 @@ public class Main {
         System.out.print("GPA: ");
         float studentGpa = scanner.nextFloat();
 
-        Student student1 = new Student(studentAge, studentName, true, studentMajor, studentGpa);
+        Student userStudent = new Student(studentAge, studentName, true, studentMajor, studentGpa);
 
-
-        System.out.println("Human information:");
-        human1.displayInfo();
+        emp2.displayInfo();
         System.out.println();
-
-        System.out.println("Employee information");
-        employee1.displayInfo();
+        emp2.introduce();
+        emp2.work();
+        emp2.takeBreak();
+        emp2.study();
+        emp2.attendClass();
+        emp2.celebrate();
         System.out.println();
-
-        System.out.println("Student information");
-        student1.displayInfo();
+        std2.displayInfo();
         System.out.println();
-
-
-        System.out.println("Human's name" + human1.getName());
-        System.out.println("Employee's salar" + employee1.getSalary());
-        System.out.println("Student's GPA" + student1.getGpa());
+        std2.introduce();
+        std2.study();
+        std2.attendClass();
+        std2.celebrate();
+        std2.displayUniversity();
         System.out.println();
-
-
-        System.out.println("Changing human's age from " + human1.getAge() + " to 50");
-        human1.setAge(50);
-
-        System.out.println("New major");
-        employee1.setdepartment("Management");
-        employee1.setSalary(95000.75f);
-
-        System.out.println("New GPA");
-        student1.setGpa(3.9f);
-
-
-        System.out.println("new Human information");
-        human1.displayInfo();
+        System.out.println("Using IWorkable reference (emp3):");
+        emp3.work();
+        emp3.takeBreak();
         System.out.println();
-
-        System.out.println("new Employee Information");
-        employee1.displayInfo();
+        System.out.println("Using IStudiable reference (std3):");
+        std3.study();
+        std3.attendClass();
         System.out.println();
-
-        System.out.println("new Student Information");
-        student1.displayInfo();
+        System.out.println("Employee's department (getter): " + emp2.getDepartment());
+        System.out.println("Employee's salary (getter): $" + emp2.getSalary());
+        System.out.println("\nChanging department to 'Management' and salary to $95000");
+        emp2.setDepartment("Management");
+        emp2.setSalary(95000.00f);
+        System.out.println("New department: " + emp2.getDepartment());
+        System.out.println("New salary: $" + emp2.getSalary());
         System.out.println();
+        System.out.println("Student's GPA (getter): " + std2.getGpa());
+        System.out.println("Changing GPA to 3.9");
+        std2.setGpa(3.9f);
+        System.out.println("New GPA: " + std2.getGpa());
+        System.out.println();
+        System.out.println("Total employees created: " + Employee.getTotalEmployees());
+        System.out.println();
+        System.out.println("Student's university (final field): " + std2.getUniversity());
 
 
 
         scanner.close();
+
     }
 }
