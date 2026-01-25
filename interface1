@@ -1,5 +1,1 @@
-interface IWorkable {
-    void work();
-    void takeBreak();
-}
 
