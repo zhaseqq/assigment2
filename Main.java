@@ -1,78 +1,118 @@
+import java.sql.*;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        String url = "jdbc:postgresql://localhost:5432/postgres";
+        String user = "postgres";
+        String password = "1234";
 
-        Human emp1 = new Employee(30, "Aliya", true, "IT", 75000.50f);
-        Employee emp2 = new Employee(35, "Nurlan", true, "Finance", 85000.00f);
-        IWorkable emp3 = new Employee(28, "Dana", true, "Marketing", 70000.00f);
-        IStudiable emp4 = new Employee(32, "Arman", true, "HR", 72000.00f);
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             Scanner sc = new Scanner(System.in)) {
 
-        Human std1 = new Student(20, "Asel", true, "Computer Science", 3.8f);
-        Student std2 = new Student(21, "Dias", true, "Business", 3.5f);
-        IStudiable std3 = new Student(19, "Madina", true, "Engineering", 3.9f);
+            while (true) {
+                System.out.println("press 1 to create book");
+                System.out.println("press 2 to read all books");
+                System.out.println("press 3 to read book by ID");
+                System.out.println("press 4 to update the book");
+                System.out.println("press 5 to delete the book");
+                System.out.println("press 6 to exit");
 
-        System.out.print("Name: ");
-        String studentName = scanner.nextLine();
+                int choice = sc.nextInt();
+                sc.nextLine();
 
-        System.out.print("Age: ");
-        int studentAge = scanner.nextInt();
-        scanner.nextLine();
+                switch (choice) {
+                    case 1:
+                        System.out.print("title: ");
+                        String title = sc.nextLine();
+                        System.out.print("author: ");
+                        String author = sc.nextLine();
+                        System.out.print("price: ");
+                        double price = sc.nextDouble();
+                        System.out.print("pages: ");
+                        int pages = sc.nextInt();
+                        System.out.print("year: ");
+                        int year = sc.nextInt();
 
-        System.out.print("Major: ");
-        String studentMajor = scanner.nextLine();
+                        if (price < 0 || pages <= 0 || year <= 0) {
+                            System.out.println("invalid values");
+                            break;
+                        }
 
-        System.out.print("GPA: ");
-        float studentGpa = scanner.nextFloat();
+                        PreparedStatement insert = conn.prepareStatement(
+                                "INSERT INTO books(title, author, price, pages, published_year) VALUES (?, ?, ?, ?, ?)");
+                        insert.setString(1, title);
+                        insert.setString(2, author);
+                        insert.setDouble(3, price);
+                        insert.setInt(4, pages);
+                        insert.setInt(5, year);
+                        insert.executeUpdate();
+                        System.out.println("book created");
+                        break;
 
-        Student userStudent = new Student(studentAge, studentName, true, studentMajor, studentGpa);
+                    case 2:
+                        ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM books");
+                        while (rs.next()) {
+                            System.out.println(rs.getInt("id") + " " + rs.getString("title"));
+                        }
+                        break;
 
-        emp2.displayInfo();
-        System.out.println();
-        emp2.introduce();
-        emp2.work();
-        emp2.takeBreak();
-        emp2.study();
-        emp2.attendClass();
-        emp2.celebrate();
-        System.out.println();
-        std2.displayInfo();
-        System.out.println();
-        std2.introduce();
-        std2.study();
-        std2.attendClass();
-        std2.celebrate();
-        std2.displayUniversity();
-        System.out.println();
-        System.out.println("Using IWorkable reference (emp3):");
-        emp3.work();
-        emp3.takeBreak();
-        System.out.println();
-        System.out.println("Using IStudiable reference (std3):");
-        std3.study();
-        std3.attendClass();
-        System.out.println();
-        System.out.println("Employee's department (getter): " + emp2.getDepartment());
-        System.out.println("Employee's salary (getter): $" + emp2.getSalary());
-        System.out.println("\nChanging department to 'Management' and salary to $95000");
-        emp2.setDepartment("Management");
-        emp2.setSalary(95000.00f);
-        System.out.println("New department: " + emp2.getDepartment());
-        System.out.println("New salary: $" + emp2.getSalary());
-        System.out.println();
-        System.out.println("Student's GPA (getter): " + std2.getGpa());
-        System.out.println("Changing GPA to 3.9");
-        std2.setGpa(3.9f);
-        System.out.println("New GPA: " + std2.getGpa());
-        System.out.println();
-        System.out.println("Total employees created: " + Employee.getTotalEmployees());
-        System.out.println();
-        System.out.println("Student's university (final field): " + std2.getUniversity());
+                    case 3:
+                        System.out.print("enter ID: ");
+                        int id = sc.nextInt();
+                        PreparedStatement sel = conn.prepareStatement("SELECT * FROM books WHERE id=?");
+                        sel.setInt(1, id);
+                        ResultSet rs2 = sel.executeQuery();
+                        if (rs2.next()) {
+                            System.out.println(rs2.getString("title") + " by " + rs2.getString("author"));
+                        } else {
+                            System.out.println("not found");
+                        }
+                        break;
 
+                    case 4:
+                        System.out.print("enter ID to update: ");
+                        int uid = sc.nextInt();
+                        sc.nextLine();
+                        System.out.print("new title: ");
+                        String nt = sc.nextLine();
+                        System.out.print("new author: ");
+                        String na = sc.nextLine();
+                        System.out.print("new price: ");
+                        double np = sc.nextDouble();
+                        System.out.print("new pages: ");
+                        int npg = sc.nextInt();
+                        System.out.print("new year: ");
+                        int ny = sc.nextInt();
 
+                        PreparedStatement upd = conn.prepareStatement(
+                                "UPDATE books SET title=?, author=?, price=?, pages=?, published_year=? WHERE id=?");
+                        upd.setString(1, nt);
+                        upd.setString(2, na);
+                        upd.setDouble(3, np);
+                        upd.setInt(4, npg);
+                        upd.setInt(5, ny);
+                        upd.setInt(6, uid);
+                        upd.executeUpdate();
+                        System.out.println("Updated!");
+                        break;
 
-        scanner.close();
+                    case 5:
+                        System.out.print("enter ID to delete: ");
+                        int did = sc.nextInt();
+                        PreparedStatement del = conn.prepareStatement("DELETE FROM books WHERE id=?");
+                        del.setInt(1, did);
+                        del.executeUpdate();
+                        System.out.println("deleted");
+                        break;
 
+                    case 6:
+                        System.out.println("exiting...");
+                        return;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
